@@ -1,5 +1,5 @@
-var express = require('express');
-var router = express.Router();
+var express = require('express')
+var router = express.Router()
 var fileUpload = require('express-fileupload')
 var imgur = require('imgur')
 var request = require('request')
