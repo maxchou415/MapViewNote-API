@@ -6,6 +6,7 @@ var request = require('request')
 
 var Data = require('../models/data')
 
+// Get all of travel points from database
 router.get('/all', (req, res, next) => {
   Data.find({}, (err, data) => {
     if(err) console.log(err)
@@ -13,6 +14,7 @@ router.get('/all', (req, res, next) => {
   })
 })
 
+// Get all of hotels from Booking.com api
 router.get('/booking/all', (req, res, next) => {
   var options = {
     url: 'https://distribution-xml.booking.com/json/bookings.getHotels?city_ids=-2637882',
@@ -29,6 +31,7 @@ router.get('/booking/all', (req, res, next) => {
   });
 })
 
+// Search hotel photos by Hotel Id (booking.com)
 router.get('/booking/hotel/:hotelId', (req, res, next) => {
   let hotelId = req.params.hotelId
   var options = {
@@ -46,6 +49,7 @@ router.get('/booking/hotel/:hotelId', (req, res, next) => {
   });
 })
 
+// Get a data by Id
 router.get('/:id', (req, res, next) => {
   let id = req.params.id
   Data.findById({'_id': id}, (err, data) => {
@@ -58,6 +62,7 @@ router.get('/:id', (req, res, next) => {
   })
 })
 
+// Create data to Database and upload photo to Imgur via imgur api.
 router.post('/create', (req, res, next) => {
   let preImageUpload = req.files.photos.data
 
@@ -89,26 +94,5 @@ router.post('/create', (req, res, next) => {
           })
     }
   })
-
-
-// router.post('/create', (req, res, next) => {
-//   let preImageUpload = req.files.photos.data
-//   let description = req.body.description
-//
-//   if(!preImageUpload) {
-//     res.status(500).send({'message': 'Photos is required.'})
-//
-//   } else {
-//     let imageUpload = req.files.photos.data.toString('base64')
-//
-//     imgur.uploadBase64(imageUpload)
-//           .then(function (json) {
-//               res.status(200).send({'imageURL': json.data.link, 'description': description, 'error': 'false'})
-//           })
-//           .catch(function (err) {
-//               console.error(err.message);
-//           })
-//   }
-// })
 
 module.exports = router;
